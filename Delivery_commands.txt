@@ -1,0 +1,15 @@
+
+sudo mkdir /home/ubuntu/shlok/fromprod/09052017
+sudo mkdir /home/ubuntu/shlok/fromprod/09052017/public
+sudo mkdir /home/ubuntu/shlok/fromprod/09052017/public/js
+sudo mkdir /home/ubuntu/shlok/fromprod/09052017/routes
+
+sudo cp /opt/foodbox_outlet/public/js/databindings.js /home/ubuntu/shlok/fromprod/06052017/public/js/databindings.js
+sudo cp /opt/foodbox_outlet/public/js/orders.js /home/ubuntu/shlok/fromprod/06052017/public/js/orders.js
+sudo cp /opt/foodbox_outlet/routes/outlet_app.js /home/ubuntu/shlok/fromprod/06052017/routes/outlet_app.js
+sudo cp /opt/foodbox_outlet/routes/order_app.js /home/ubuntu/shlok/fromprod/06052017/routes/order_app.js
+sudo cp -R /home/ubuntu/shlok/fromshlok/09052017/* /opt/foodbox_outlet
+
+sudo restart foodbox_outlet
+sudo restart foodbox_plc
+sudo restart foodbox_menu_display

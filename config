@@ -1,0 +1,1 @@
+{"lane_count":1,"async_scan":false,"dispenser_slot_count":150,"plc_type":1,"plc_ip":"192.168.1.80","plc_port":49818,"item_dispense_timeout_secs":5000,"outlet_id":20}
