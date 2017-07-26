@@ -126,8 +126,8 @@ function sendSMS(mobile_num, bill_no, amount, bill_location, outlet_phone_no) {
         UserName: process.env.SMS_USERNAME,
         password: process.env.SMS_PASSWORD,
         MobileNo: mobile_num,
-        SenderID: 'FRSHLY',
-        CDMAHeader: 'FRSHLY',
+        SenderID: 'iTATAQ',
+        CDMAHeader: 'iTATAQ',
         Message: sms_message
       };
     request({
@@ -154,8 +154,8 @@ function sendUpdatedSMS(item_name, bill_no, mobile_num) {
       UserName: process.env.SMS_USERNAME,
       password: process.env.SMS_PASSWORD,
       MobileNo: mobile_num,
-      SenderID: 'FRSHLY',
-      CDMAHeader: 'FRSHLY',
+      SenderID: 'iTATAQ',
+      CDMAHeader: 'iTATAQ',
       Message: sms_message
     };
   request({
