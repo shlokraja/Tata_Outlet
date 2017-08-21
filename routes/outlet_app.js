@@ -545,7 +545,7 @@ router.post('/start_of_day_signal', function (req, res, next) {
     // Pre-Printed Code - End
 
     // Resetting the bill_no to 1 because its at the end of the day
-    redisClient.set(helper.bill_no_node, 1, function (b_err, b_reply) {
+    redisClient.set(helper.bill_no_node, 100, function (b_err, b_reply) {
         if (b_err) {
             console.error("error while setting bill_no in redis- {}".format(b_err));
             return;
@@ -677,7 +677,7 @@ router.post('/end_of_day_signal', function (req, res, next) {
     // Pre-Printed Code - End
 
     // Resetting the bill_no to 1 because its at the end of the day
-    redisClient.set(helper.bill_no_node, 1, function (b_err, b_reply) {
+    redisClient.set(helper.bill_no_node, 100, function (b_err, b_reply) {
         if (b_err) {
             console.error("error while setting bill_no in redis- {}".format(b_err));
             return;

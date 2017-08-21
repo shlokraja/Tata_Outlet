@@ -49,6 +49,12 @@ router.post('/update_order_item_status', function (req, res, next)
               if (queue_item.dispense_id == updated_item.dispense_id)
               {
                   changed_index = i;
+		  //as per discussion with rajasekar timeout is changed to delivered
+		   if (updated_item.status=="timeout") 
+		   {
+		   console.log("timeout item:"+JSON.stringify(updated_item));
+		   updated_item.status="delivered"; 		   
+		   } 
                   if (updated_item.status == "delivered")
                   {
                       // remove the item from the queue

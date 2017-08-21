@@ -5,9 +5,8 @@ var cheerio = require('cheerio');
 var path = require('path');
 var redis = require('redis');
 var format = require('string-format');
-var toFixed = require('tofixed');
+
 var helper = require('../routes/helper');
-var outlet_id = process.env.OUTLET_ID;
 
 format.extend(String.prototype);
 var redisClient = redis.createClient({ connect_timeout: 2000, retry_max_delay: 5000 });
@@ -17,63 +16,41 @@ redisClient.on('error', function (msg) {
 
 function startPrint(bill_dict, bill_no, date, time, savings, mobile_num, outlet_phone_no) {
     // Opening the html file
-    console.log("startPrint-----------------",bill_dict);
     var filePath = path.join(__dirname, '/../');
     filePath = path.join(filePath, 'public/bill.html');
     var bill_text = '';
     var bill_total_amount = 0;
-    for (restaurant_id in bill_dict) {
+    for (restaurant_id in bill_dict)
+    {
         var bill_item = bill_dict[restaurant_id];
         var html = fs.readFileSync(filePath, 'utf8');
         var $ = cheerio.load(html);
         // Updating the contents
-      $("#date_time #date").text(' Date : ' + date);
-      $("#date_time #time").text('-' + time);
-      $("#order_no").text(bill_no.toString());
-      $("#tin_no").text('GSTIN No: ' + bill_item[0]["tin_no"]);
-      $("#rest_name").text(bill_item[0]["entity"]);
-	$("#res_name").text('Name: ' + bill_item[0]["entity"]);
-      	$("#outlet_id").text(outlet_id.toString());
-       $("#restaurant_id").text(bill_item[0]["restaurant_id"].toString());
-	 $("#address").text(bill_item[0]["address"].toString());
-        var quantity = 0;
-        var gst_percent= 0;
-        var selling_amt = 0;	
-	var sgst_percent = bill_item[0]["sgst_percent"]==undefined?0:bill_item[0]["sgst_percent"];
-	var cgst_percent = bill_item[0]["cgst_percent"]==undefined?0:bill_item[0]["cgst_percent"];
-    	var bill_total_amount=0;
-	var total_gst_percent= sgst_percent + cgst_percent;
-	var amount_val= 0;
-	var round_off = 0;
-	var mrp_per_item = 0;
-	var rate_per_item = 0;	
-      for(var i = 0; i < bill_item.length; i++) {
-          if (!bill_item[i]["side_order"]) {
+        $("#date_time #date").text('Date - ' + date);
+        $("#date_time #time").text('Time - ' + time);
+        $("#order_no").text('ORDER NO: ' + bill_no);
+        $("#tin_no").text('TIN No- ' + bill_item[0]["tin_no"]);
+        $("#st_no").text('ST No- ' + bill_item[0]["st_no"]);
+        $("#rest_name").text(bill_item[0]["restaurant_name"]);
+        var total_amount = 0;
+        for (var i = 0; i < bill_item.length; i++)
+        {
+            if (!bill_item[i]["side_order"])
+            {
                 bill_item[i]["side_order"] = "";
             }
-	  quantity = bill_item[i]["count"];
-          mrp_per_item = bill_item[i]["amount"] / quantity;
-          gst_percent =  bill_item[0]["sgst_percent"] + bill_item[0]["cgst_percent"] + 100;
-	  rate_per_item = (mrp_per_item * 100) / gst_percent;
-          selling_amt =  quantity * rate_per_item;
-          $("#items tbody").prepend("<tr><td>"+(bill_item.length-i)+"</td><td>"+bill_item[i]["name"]+"<div class='side_order'>"+bill_item[i]["side_order"]+"</div></td>   <td>21069099</td><td>"+ quantity +"</td><td>" + toFixed(rate_per_item,2) +" </td><td>"+total_gst_percent+"%</td><td>"+ toFixed(rate_per_item * quantity,2) +"</td></tr>");
-          amount_val += selling_amt;
-	round_off += toFixed(rate_per_item,0) * quantity;
-	bill_total_amount += bill_item[i]["amount"];
+            $("#items tbody").prepend("<tr><td>" + (bill_item.length - i) + "</td><td>" + bill_item[i]["name"] + "<div class='side_order'>" + bill_item[i]["side_order"] + "</div></td><td>" + bill_item[i]["count"].toString() + "</td><td>" + bill_item[i]["amount"].toString() + "</td></tr>");
+            total_amount += bill_item[i]["amount"];
         }
-	$("#amount_val").text(''+ toFixed(amount_val,2));
-	var gs =  toFixed((amount_val * sgst_percent /100),2);
-	var gc =  toFixed((amount_val * cgst_percent /100),2);
-	$("#amount_cgst").text(''+ gs);
-	$("#amount_sgst").text(''+ gc);
-        $("#cgstvalue").text(cgst_percent.toString() +'%');
-        $("#sgstvalue").text(sgst_percent.toString() +'%'); 
+        bill_total_amount += total_amount;
         $("#amount_num").text(total_amount.toString());
 
         // Showing the savings if any
-      if (savings != 0) {
+        if (savings != 0)
+        {
             $("#savings").text("You have saved INR " + savings);
-      } else { // else do not show
+        } else
+        { // else do not show
             $("#savings").css("display", "none");
         }
 
